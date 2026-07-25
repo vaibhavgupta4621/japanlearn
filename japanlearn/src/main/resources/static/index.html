@@ -19,43 +19,73 @@
             padding: 40px;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            width: 360px;
+            width: 380px;
         }
         .japanese { font-size: 52px; margin-bottom: 10px; }
         .reading  { font-size: 20px; color: #666; margin-bottom: 10px; }
-        .meaning  { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 10px; }
-        .example  { font-size: 16px; color: #888; margin-bottom: 30px; }
+        .meaning  { font-size: 24px; font-weight: bold; color: #e63946; margin-bottom: 10px; }
+        .example  { font-size: 16px; color: #888; margin-bottom: 20px; }
+        .score    { font-size: 16px; color: #444; margin-bottom: 20px; }
+        .hidden   { visibility: hidden; }
         button {
-            background: #e63946;
-            color: white;
             border: none;
             padding: 14px 32px;
             border-radius: 8px;
             font-size: 18px;
             cursor: pointer;
+            margin: 5px;
+            color: white;
         }
-        button:hover { background: #c1121f; }
+        #revealBtn { background: #457b9d; }
+        #revealBtn:hover { background: #1d3557; }
+        #nextBtn   { background: #e63946; display: none; }
+        #nextBtn:hover { background: #c1121f; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>🇯🇵 JapanLearn</h2>
+        <div class="score">Score: <span id="score">0</span> / <span id="total">0</span></div>
         <div class="japanese" id="word">...</div>
         <div class="reading"  id="reading">...</div>
-        <div class="meaning"  id="meaning">...</div>
-        <div class="example"  id="example">...</div>
-        <button onclick="loadWord()">Next Word ➡️</button>
+        <div class="meaning  hidden" id="meaning">...</div>
+        <div class="example  hidden" id="example">...</div>
+        <br>
+        <button id="revealBtn" onclick="reveal()">Reveal Answer 👁️</button>
+        <button id="nextBtn"   onclick="loadWord()">Next Word ➡️</button>
     </div>
 
     <script>
+        let score = 0;
+        let total = 0;
+
         async function loadWord() {
             const res  = await fetch('/api/vocabulary/random');
             const data = await res.json();
+
             document.getElementById('word').textContent    = data.word;
             document.getElementById('reading').textContent = data.reading;
             document.getElementById('meaning').textContent = data.meaning;
             document.getElementById('example').textContent = data.example;
+
+            document.getElementById('meaning').classList.add('hidden');
+            document.getElementById('example').classList.add('hidden');
+            document.getElementById('revealBtn').style.display = 'inline-block';
+            document.getElementById('nextBtn').style.display   = 'none';
+
+            total++;
+            document.getElementById('total').textContent = total;
         }
+
+        function reveal() {
+            document.getElementById('meaning').classList.remove('hidden');
+            document.getElementById('example').classList.remove('hidden');
+            document.getElementById('revealBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display   = 'inline-block';
+            score++;
+            document.getElementById('score').textContent = score;
+        }
+
         loadWord();
     </script>
 </body>
