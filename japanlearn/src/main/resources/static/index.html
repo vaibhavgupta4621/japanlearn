@@ -29,34 +29,39 @@
         .hidden   { visibility: hidden; }
         button {
             border: none;
-            padding: 14px 32px;
+            padding: 14px 24px;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             margin: 5px;
             color: white;
         }
-        #revealBtn { background: #457b9d; }
-        #revealBtn:hover { background: #1d3557; }
-        #nextBtn   { background: #e63946; display: none; }
-        #nextBtn:hover { background: #c1121f; }
+        #revealBtn   { background: #457b9d; }
+        #correctBtn  { background: #2a9d8f; display: none; }
+        #wrongBtn    { background: #e76f51; display: none; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>🇯🇵 JapanLearn</h2>
-        <div class="score">Score: <span id="score">0</span> / <span id="total">0</span></div>
+        <div class="score">
+            ✅ <span id="score">0</span> &nbsp;
+            ❌ <span id="wrong">0</span> &nbsp;
+            Total: <span id="total">0</span>
+        </div>
         <div class="japanese" id="word">...</div>
         <div class="reading"  id="reading">...</div>
-        <div class="meaning  hidden" id="meaning">...</div>
-        <div class="example  hidden" id="example">...</div>
+        <div class="meaning hidden" id="meaning">...</div>
+        <div class="example hidden" id="example">...</div>
         <br>
-        <button id="revealBtn" onclick="reveal()">Reveal Answer 👁️</button>
-        <button id="nextBtn"   onclick="loadWord()">Next Word ➡️</button>
+        <button id="revealBtn"  onclick="reveal()">Reveal Answer 👁️</button>
+        <button id="correctBtn" onclick="markCorrect()">✅ Got it!</button>
+        <button id="wrongBtn"   onclick="markWrong()">❌ Missed it</button>
     </div>
 
     <script>
         let score = 0;
+        let wrong = 0;
         let total = 0;
 
         async function loadWord() {
@@ -70,20 +75,38 @@
 
             document.getElementById('meaning').classList.add('hidden');
             document.getElementById('example').classList.add('hidden');
-            document.getElementById('revealBtn').style.display = 'inline-block';
-            document.getElementById('nextBtn').style.display   = 'none';
+            document.getElementById('revealBtn').style.display  = 'inline-block';
+            document.getElementById('correctBtn').style.display = 'none';
+            document.getElementById('wrongBtn').style.display   = 'none';
 
             total++;
-            document.getElementById('total').textContent = total;
+            updateScore();
         }
 
         function reveal() {
             document.getElementById('meaning').classList.remove('hidden');
             document.getElementById('example').classList.remove('hidden');
-            document.getElementById('revealBtn').style.display = 'none';
-            document.getElementById('nextBtn').style.display   = 'inline-block';
+            document.getElementById('revealBtn').style.display  = 'none';
+            document.getElementById('correctBtn').style.display = 'inline-block';
+            document.getElementById('wrongBtn').style.display   = 'inline-block';
+        }
+
+        function markCorrect() {
             score++;
+            updateScore();
+            loadWord();
+        }
+
+        function markWrong() {
+            wrong++;
+            updateScore();
+            loadWord();
+        }
+
+        function updateScore() {
             document.getElementById('score').textContent = score;
+            document.getElementById('total').textContent = total;
+            document.getElementById('wrong').textContent = wrong;
         }
 
         loadWord();
