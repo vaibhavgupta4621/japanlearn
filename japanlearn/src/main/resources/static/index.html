@@ -83,9 +83,32 @@
             font-size: 11px;
             padding: 4px 12px;
             border-radius: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             letter-spacing: 1px;
             text-transform: uppercase;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #f0f0f0;
+            border-radius: 10px;
+            height: 8px;
+            margin: 8px 0 4px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 16px;
         }
 
         .japanese {
@@ -193,6 +216,11 @@
 
         <div class="card">
             <div class="tag">N5 Vocabulary</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 / 30 words</div>
+
             <div class="japanese" id="word">...</div>
             <div class="reading" id="reading">...</div>
             <div class="divider"></div>
@@ -200,15 +228,9 @@
             <div class="example hidden" id="example">...</div>
 
             <div class="buttons">
-                <button id="revealBtn" onclick="reveal()">
-                    Reveal Answer 👁️
-                </button>
-                <button id="correctBtn" class="hidden" onclick="markCorrect()">
-                    ✅ Got it!
-                </button>
-                <button id="wrongBtn" class="hidden" onclick="markWrong()">
-                    ❌ Missed it
-                </button>
+                <button id="revealBtn" onclick="reveal()">Reveal Answer 👁️</button>
+                <button id="correctBtn" class="hidden" onclick="markCorrect()">✅ Got it!</button>
+                <button id="wrongBtn" class="hidden" onclick="markWrong()">❌ Missed it</button>
             </div>
         </div>
     </div>
@@ -250,6 +272,9 @@
             document.getElementById('score').textContent = score;
             document.getElementById('wrong').textContent = wrong;
             document.getElementById('total').textContent = total;
+            const pct = Math.min((total / 30) * 100, 100);
+            document.getElementById('progressBar').style.width = pct + '%';
+            document.getElementById('progressText').textContent = total + ' / 30 words';
         }
 
         loadWord();
