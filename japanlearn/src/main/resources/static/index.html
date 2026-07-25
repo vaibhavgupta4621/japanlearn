@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JapanLearn 🇯🇵</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            width: 360px;
+        }
+        .japanese { font-size: 52px; margin-bottom: 10px; }
+        .reading  { font-size: 20px; color: #666; margin-bottom: 10px; }
+        .meaning  { font-size: 24px; font-weight: bold; color: #333; margin-bottom: 10px; }
+        .example  { font-size: 16px; color: #888; margin-bottom: 30px; }
+        button {
+            background: #e63946;
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        button:hover { background: #c1121f; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🇯🇵 JapanLearn</h2>
+        <div class="japanese" id="word">...</div>
+        <div class="reading"  id="reading">...</div>
+        <div class="meaning"  id="meaning">...</div>
+        <div class="example"  id="example">...</div>
+        <button onclick="loadWord()">Next Word ➡️</button>
+    </div>
+
+    <script>
+        async function loadWord() {
+            const res  = await fetch('/api/vocabulary/random');
+            const data = await res.json();
+            document.getElementById('word').textContent    = data.word;
+            document.getElementById('reading').textContent = data.reading;
+            document.getElementById('meaning').textContent = data.meaning;
+            document.getElementById('example').textContent = data.example;
+        }
+        loadWord();
+    </script>
+</body>
+</html>
